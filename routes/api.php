@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::name('account.')->prefix('account')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/', [AuthController::class, 'index'])->middleware('auth:sanctum');
+});
+
+
+Route::name('homes.')->prefix('homes')->middleware('auth:sanctum')->group(function () {
+    Route::post('/budget', [HomeController::class, 'budget']);
+    Route::post('/sqft', [HomeController::class, 'sqft']);
+    Route::post('/age', [HomeController::class, 'age']);
+    Route::post('/standard_price', [HomeController::class, 'standardPrice']);
 });
