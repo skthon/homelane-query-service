@@ -24,7 +24,7 @@ class DataService
     {
         $this->baseUrl = config('data_service.base_url');
         $this->headers = [
-            'Content-Type' => 'application/json'
+            'Accept' => 'application/json'
         ];
     }
 
@@ -35,9 +35,9 @@ class DataService
      * @param int $maxPrice
      * @return array
      */
-    public function getHomesByPrice(int $minPrice, int $maxPrice): array
+    public function getHomesByPrice($minPrice, $maxPrice): array
     {
-        return $this->makeRequest('POST', '/data', [], [
+        return $this->makeRequest('POST', '/api/data', [], [
             'min_price' => $minPrice,
             'max_price' => $maxPrice
         ]);
@@ -49,13 +49,12 @@ class DataService
      * @param  int   $year
      * @return array
      */
-    public function getHomesBySqft(int $minSqft): array
+    public function getHomesBySqft($minSqft): array
     {
-        return $this->makeRequest('POST', '/data', [], [
+        return $this->makeRequest('POST', '/api/data', [], [
             'min_sqft_living' => $minSqft
         ]);
     }
-
 
     /**
      * Get homes which are either built or renovated after the specified year
@@ -63,9 +62,9 @@ class DataService
      * @param  int   $year
      * @return array
      */
-    public function getHomesByYear(int $year): array
+    public function getHomesByYear($year): array
     {
-        return $this->makeRequest('POST', '/data', [], [
+        return $this->makeRequest('POST', '/api/data', [], [
             'min_year' => $year
         ]);
     }
@@ -77,7 +76,7 @@ class DataService
      */
     public function getHomesWithStandardizedPrices(): array
     {
-        return $this->makeRequest('POST', '/data', [], [
+        return $this->makeRequest('POST', '/api/data', [], [
             'standardized_price' => true
         ]);
     }

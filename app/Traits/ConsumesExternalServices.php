@@ -14,12 +14,17 @@ trait ConsumesExternalServices
      */
     public function makeRequest(string $method, string $requestUrl, $queryParams = [], $formParams = [], $headers = [])
     {
-        $client = new Client(['base_uri' => $this->baseUri]);
+        $client = new Client(['base_uri' => $this->baseUrl]);
+
+        // TODO: remove this if heroku supports static ip/ if we move to other platform
+        $formParams = array_merge($formParams, ['bypass_ip' => true]);
 
         $response = $client->request($method, $requestUrl, [
-            'query'      => $queryParams,
-            'form_params'=> $formParams,
-            'headers'    => $headers,
+            'query'           => $queryParams,
+            'form_params'     => $formParams,
+            'headers'         => $headers,
+            'timeout'         => 5,
+            'connect_timeout' => 2
         ]);
 
         $data = $response->getBody()->getContents();

@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Services\DataService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -21,12 +22,13 @@ class HomeController extends Controller
             ! $request->has('minPrice') || ! $request->has('maxPrice')
             || $request->get('minPrice') >= $request->get('maxPrice')
         ) {
-            return response()->json(["error" => "Please specify the minPRice,maxPrices parameters"], 400);
+            return response()->json(["error" => "Please specify the minPrice,maxPrices parameters"], 400);
         }
 
         try {
             $data = (new DataService())->getHomesByPrice($request->get('minPrice'), $request->get('maxPrice'));
         } catch (Exception $ex) {
+            Log::info("[error] [budget] " . $ex->getMessage() . " " . __CLASS__ . "::" . __LINE__ );
             return response()->json(["error" => "Internal error"], 500);
         }
 
@@ -48,6 +50,7 @@ class HomeController extends Controller
         try {
             $data = (new DataService())->getHomesBySqft($request->get('minSqft'));
         } catch (Exception $ex) {
+            Log::info("[error] [sqft] " . $ex->getMessage() . " " .  __CLASS__ . "::" . __LINE__ );
             return response()->json(["error" => "Internal error"], 500);
         }
 
@@ -69,6 +72,7 @@ class HomeController extends Controller
         try {
             $data = (new DataService())->getHomesByYear($request->get('year'));
         } catch (Exception $ex) {
+            Log::info("[error] [age] " . $ex->getMessage() . " " . __CLASS__ . "::" . __LINE__ );
             return response()->json(["error" => "Internal error"], 500);
         }
 
@@ -86,6 +90,7 @@ class HomeController extends Controller
         try {
             $data = (new DataService())->getHomesWithStandardizedPrices();
         } catch (Exception $ex) {
+            Log::info("[error] [standard-price] " . $ex->getMessage() . " " . __CLASS__ . "::" . __LINE__ );
             return response()->json(["error" => "Internal error"], 500);
         }
 
